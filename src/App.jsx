@@ -3,22 +3,23 @@ import { useEffect, useState } from "react";
 const App = () => {
   // const [message, setMessage] = useState("타이머시작");
 
-  // useEffect(() => {
-  //   const delay = (ms) => {
-  //     const promise = new Promise((resolve) => {
-  //       setTimeout(resolve, ms);
-  //     });
-  //     return promise;
-  //   };
-  //   delay(2000).then(() => {
-  //     setMessage("2초 후 메시지 변경 완료");
-  //   });
-  // }, []);
-
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts/1")
-      .then((response) => response.json())
-      .then((json) => console.log(json));
+    // fetch("https://jsonplaceholder.typicode.com/posts/1")
+    //   .then((response) => response.json())
+    //   .then((json) => console.log(json));
+
+    Promise.all([
+      fetch("https://jsonplaceholder.typicode.com/posts/1").then((response) =>
+        response.json()
+      ),
+      fetch("https://jsonplaceholder.typicode.com/posts/1").then((response) =>
+        response.json()
+      ),
+    ]).then(([response1, response2]) => {
+      // 구조분해 할당으로 Promise 병렬처리
+      console.log("response1", response1);
+      console.log("response2", response2);
+    });
   }, []);
 
   return <div>{/* <h1>{message}</h1> */}</div>;
