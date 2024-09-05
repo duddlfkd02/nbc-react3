@@ -6,6 +6,10 @@ const App = () => {
   const [todo, setTodo] = useState({
     title: "",
   });
+  const [targetId, setTargetId] = useState("");
+  const [editTodo, setEditTodo] = useState({
+    title: "",
+  });
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -37,16 +41,54 @@ const App = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const onEditHandler = async (targetId, editTodo) => {
+    await axios.patch("http://localhost:4000/todos/" + targetId, editTodo);
+    const newTodos = todos.map((todo) => {
+      if (todo.id === targetId) {
+        return {
+          ...todo,
+          title: editTodo.title,
+        };
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+  };
+
   return (
     <div>
       <h3>axios 연습</h3>
       <form
         onSubmit={(e) => {
-          // alert("test");
           e.preventDefault();
           onSubmitHandler(todo);
         }}
       >
+        {/* 수정 UI */}
+        <div>
+          <input
+            type="text"
+            placeholder="수정하고 싶은 Todo Id 입력"
+            onChange={(e) => {
+              setTargetId(e.target.value);
+            }}
+          />
+          <input
+            type="text"
+            placeholder="수정할 값 입력"
+            onChange={(e) => {
+              setEditTodo({ ...editTodo, title: e.target.value });
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => {
+              onEditHandler(targetId, editTodo);
+            }}
+          >
+            수정하기
+          </button>
+        </div>
         <input
           type="text"
           onChange={(e) => {
