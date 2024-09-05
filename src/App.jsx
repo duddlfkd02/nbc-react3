@@ -22,7 +22,12 @@ const App = () => {
   console.log("🚀 ~ App ~ todos:", todos);
 
   const onSubmitHandler = async (todo) => {
-    await axios.post("http://localhost:4000/todos", todo);
+    const { data } = await axios.post("http://localhost:4000/todos", todo);
+    //console.log("response", response)
+    // -> 응답 데이터 확인 data 있고 그 안에 자동으로 생성된 id 확인
+    // -> 구조분해할당으로 { data } 로 담은 후 setTodos에 넣음
+    // 끝나고 나면
+    setTodos([...todos, data]);
   };
 
   return (
@@ -43,6 +48,13 @@ const App = () => {
         />
         <button type="submit">추가</button>
       </form>
+      {todos.map((todo) => {
+        return (
+          <div key={todo.id}>
+            <p>{todo.title}</p>
+          </div>
+        );
+      })}
     </div>
   );
 };
