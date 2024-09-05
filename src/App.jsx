@@ -21,6 +21,7 @@ const App = () => {
   }, []);
   console.log("🚀 ~ App ~ todos:", todos);
 
+  // 추가
   const onSubmitHandler = async (todo) => {
     const { data } = await axios.post("http://localhost:4000/todos", todo);
     //console.log("response", response)
@@ -28,6 +29,12 @@ const App = () => {
     // -> 구조분해할당으로 { data } 로 담은 후 setTodos에 넣음
     // 끝나고 나면
     setTodos([...todos, data]);
+  };
+
+  //삭제
+  const onDeleteHandler = async (id) => {
+    await axios.delete("http://localhost:4000/todos/" + id);
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -48,10 +55,11 @@ const App = () => {
         />
         <button type="submit">추가</button>
       </form>
-      {todos.map((todo) => {
+      {todos?.map((todo) => {
         return (
           <div key={todo.id}>
-            <p>{todo.title}</p>
+            <span>{todo.title}</span>{" "}
+            <button onClick={() => onDeleteHandler(todo.id)}>삭제</button>
           </div>
         );
       })}
