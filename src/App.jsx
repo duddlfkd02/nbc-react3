@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 
 const App = () => {
   const [todos, setTodos] = useState(null);
+  const [todo, setTodo] = useState({
+    title: "",
+  });
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -18,10 +21,28 @@ const App = () => {
   }, []);
   console.log("🚀 ~ App ~ todos:", todos);
 
+  const onSubmitHandler = async (todo) => {
+    await axios.post("http://localhost:4000/todos", todo);
+  };
+
   return (
     <div>
       <h3>axios 연습</h3>
-      {/* {todos ? <div>{todos.title}</div> : <div>Loading...</div>} */}
+      <form
+        onSubmit={(e) => {
+          // alert("test");
+          e.preventDefault();
+          onSubmitHandler(todo);
+        }}
+      >
+        <input
+          type="text"
+          onChange={(e) => {
+            setTodo({ ...todo, title: e.target.value });
+          }}
+        />
+        <button type="submit">추가</button>
+      </form>
     </div>
   );
 };

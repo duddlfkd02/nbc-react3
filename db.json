@@ -1,8 +1,12 @@
 {
   "todos": [
     {
-      "id": 1,
+      "id": "1",
       "title": "json-server"
+    },
+    {
+      "id": "2966",
+      "title": "새로운!"
     }
   ]
 }
