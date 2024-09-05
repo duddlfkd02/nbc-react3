@@ -1,28 +1,30 @@
 import { useEffect, useState } from "react";
 
 const App = () => {
-  // const [message, setMessage] = useState("타이머시작");
+  const [post, setPost] = useState(null);
 
   useEffect(() => {
-    // fetch("https://jsonplaceholder.typicode.com/posts/1")
-    //   .then((response) => response.json())
-    //   .then((json) => console.log(json));
-
-    Promise.all([
-      fetch("https://jsonplaceholder.typicode.com/posts/1").then((response) =>
-        response.json()
-      ),
-      fetch("https://jsonplaceholder.typicode.com/posts/1").then((response) =>
-        response.json()
-      ),
-    ]).then(([response1, response2]) => {
-      // 구조분해 할당으로 Promise 병렬처리
-      console.log("response1", response1);
-      console.log("response2", response2);
-    });
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/posts/1"
+        );
+        const data = await response.json();
+        setPost(data);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchPost();
   }, []);
+  // console.log("🚀 ~ App ~ post:", post);
 
-  return <div>{/* <h1>{message}</h1> */}</div>;
+  return (
+    <div>
+      <h3>async / await 연습</h3>
+      {post ? <div>{post.title}</div> : <div>Loading...</div>}
+    </div>
+  );
 };
 
 export default App;
