@@ -1,4 +1,5 @@
-import axios from "axios";
+// import axios from "axios";
+import api from "./axios/api";
 import { useEffect, useState } from "react";
 
 const App = () => {
@@ -14,8 +15,7 @@ const App = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const { data } = await axios.get("http://localhost:4000/todos");
-        // const data = await response.json();
+        const { data } = await api.get("/todos");
         setTodos(data);
       } catch (error) {
         console.log("error", error);
@@ -23,26 +23,21 @@ const App = () => {
     };
     fetchPost();
   }, []);
-  console.log("🚀 ~ App ~ todos:", todos);
 
   // 추가
   const onSubmitHandler = async (todo) => {
-    const { data } = await axios.post("http://localhost:4000/todos", todo);
-    //console.log("response", response)
-    // -> 응답 데이터 확인 data 있고 그 안에 자동으로 생성된 id 확인
-    // -> 구조분해할당으로 { data } 로 담은 후 setTodos에 넣음
-    // 끝나고 나면
+    const { data } = await api.post("/todos", todo);
     setTodos([...todos, data]);
   };
 
   //삭제
   const onDeleteHandler = async (id) => {
-    await axios.delete("http://localhost:4000/todos/" + id);
+    await api.delete("/todos/" + id);
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   const onEditHandler = async (targetId, editTodo) => {
-    await axios.patch("http://localhost:4000/todos/" + targetId, editTodo);
+    await api.patch("/todos/" + targetId, editTodo);
     const newTodos = todos.map((todo) => {
       if (todo.id === targetId) {
         return {
